@@ -1,5 +1,4 @@
-﻿
-namespace Standard
+﻿namespace Standard
 {
     using System;
     using System.ComponentModel;
