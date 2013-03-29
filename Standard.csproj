@@ -65,23 +65,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComGuids.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="DoubleUtil.cs" />
     <Compile Include="Enumerable2.cs" />
-    <Compile Include="ErrorCodes.cs" />
-    <Compile Include="FileWalker.cs" />
     <Compile Include="MergeableCollection.cs" />
-    <Compile Include="NativeMethods.cs" />
     <Compile Include="NotifyingList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShellProvider.cs" />
     <Compile Include="SmallString.cs" />
     <Compile Include="SmallUri.cs" />
-    <Compile Include="StreamHelper.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Verify.cs" />
-    <Compile Include="WicProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
