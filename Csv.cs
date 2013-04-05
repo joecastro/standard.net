@@ -70,7 +70,6 @@
                 sb.Append(reader.ReadLine());
                 lastChance = reader.EndOfStream;
             }
-            throw new Exception("Can't get here.");
         }
 
         private static readonly string bellString = Encoding.ASCII.GetString(new byte[] { 7 });
