@@ -136,7 +136,7 @@ namespace Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static bool AreSorted<T>(this IEnumerable<T> enumerable)
         {
-            return _AreSorted(enumerable);
+            return _AreSorted(enumerable, null);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
