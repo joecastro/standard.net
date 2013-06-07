@@ -205,6 +205,7 @@ namespace Standard
     /// <summary>
     /// Wraps a managed stream instance into an interface pointer consumable by COM.
     /// </summary>
+    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
     internal sealed class ManagedIStream : IStream, IDisposable
     {
         private const int STGTY_STREAM = 2;

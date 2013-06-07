@@ -2,12 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Text;
 
     internal static class Csv
     {
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static string Escape(string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -28,6 +30,7 @@
             return str;
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static string MakeLine(string[] data)
         {
             var sb = new StringBuilder();
@@ -41,6 +44,7 @@
         }
 
         // Read a logical line from the stream.  It may contain embedded newlines if it was CSV-style escaped.
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static string _ReadLine(StreamReader reader)
         {
             int i = 0;
@@ -74,6 +78,7 @@
 
         private static readonly string bellString = Encoding.ASCII.GetString(new byte[] { 7 });
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static List<string> _ParseLine(string row)
         {
             if (!row.Contains('\"'))
@@ -127,7 +132,7 @@
                 }
             }
 
-            if (row.EndsWith(","))
+            if (row.EndsWith(",", StringComparison.Ordinal))
             {
                 ret.Add("");
             }
@@ -135,6 +140,7 @@
             return ret;
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static List<Dictionary<string, string>> ReadDocument(StreamReader reader)
         { 
             List<string> headers = _ParseLine(_ReadLine(reader));

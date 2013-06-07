@@ -7,11 +7,13 @@
 namespace Standard
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Security.Permissions;
 
     internal class FileWalker
     {
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IEnumerable<FileInfo> GetFiles(DirectoryInfo startDirectory, string pattern, bool recurse)
         {
             // We suppressed this demand for each p/invoke call, so demand it upfront once

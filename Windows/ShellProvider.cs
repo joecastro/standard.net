@@ -1,11 +1,11 @@
 ﻿namespace Standard
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using System.Runtime.InteropServices.ComTypes;
     using System.Text;
-
     using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
 
     #region Enums and Static Property Classes
@@ -1274,11 +1274,13 @@
 
     internal static class ShellUtil
     {
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static string GetPathFromShellItem(IShellItem item)
         {
             return item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IShellItem2 GetShellItemForPath(string path)
         {
             if (string.IsNullOrEmpty(path))
