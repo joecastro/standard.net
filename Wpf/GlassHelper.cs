@@ -3,6 +3,7 @@ namespace Standard
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
     using System.Windows;
     using System.Windows.Interop;
     using System.Windows.Media;
@@ -27,6 +28,7 @@ namespace Standard
         // TODO:
         // Verify that this really is sufficient.  There are DWMWINDOWATTRIBUTEs as well, so this may
         // be able to be turned off on a per-HWND basis, but I never see comments about that online...
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static bool IsCompositionEnabled
         {
             get
@@ -40,6 +42,7 @@ namespace Standard
             }
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static bool ExtendGlassFrameComplete(Window window)
         {
             return ExtendGlassFrame(window, new Thickness(-1));
@@ -54,6 +57,7 @@ namespace Standard
         /// <remarks>
         /// This function adds hooks to the Window to respond to changes to whether composition is enabled.
         /// </remarks>
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static bool ExtendGlassFrame(Window window, Thickness margin)
         {
             Verify.IsNotNull(window, "window");
@@ -72,6 +76,7 @@ namespace Standard
             return _ExtendGlassFrameInternal(window, margin);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static bool _ExtendGlassFrameInternal(Window window, Thickness margin)
         {
             Assert.IsNotNull(window);
@@ -177,6 +182,7 @@ namespace Standard
 
         private static readonly Dictionary<IntPtr, HwndSourceHook> _attributedWindows = new Dictionary<IntPtr, HwndSourceHook>();
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static bool SetWindowThemeAttribute(Window window, bool showCaption, bool showIcon)
         {
             Verify.IsNotNull(window, "window");
@@ -195,6 +201,7 @@ namespace Standard
             return _SetWindowThemeAttribute(window, showCaption, showIcon);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static bool _SetWindowThemeAttribute(Window window, bool showCaption, bool showIcon)
         {
             bool isGlassEnabled;

@@ -32,6 +32,7 @@
         /// </summary>
         /// <param name="logicalPoint">A point in the logical coordinate system.</param>
         /// <returns>Returns the parameter converted to the system's coordinates.</returns>
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static Point LogicalPixelsToDevice(Point logicalPoint)
         {
             return _transformToDevice.Transform(logicalPoint);
@@ -42,6 +43,7 @@
         /// </summary>
         /// <param name="logicalPoint">A point in the physical coordinate system.</param>
         /// <returns>Returns the parameter converted to the device independent coordinate system.</returns>
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static Point DevicePixelsToLogical(Point devicePoint)
         {
             return _transformToDip.Transform(devicePoint);
@@ -56,6 +58,7 @@
             return new Rect(topLeft, bottomRight);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static Rect DeviceRectToLogical(Rect deviceRectangle)
         {
             Point topLeft = DevicePixelsToLogical(new Point(deviceRectangle.Left, deviceRectangle.Top));
@@ -72,6 +75,7 @@
             return new Size { Width = pt.X, Height = pt.Y };
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static Size DeviceSizeToLogical(Size deviceSize)
         {
             Point pt = DevicePixelsToLogical(new Point(deviceSize.Width, deviceSize.Height));
@@ -79,6 +83,7 @@
             return new Size(pt.X, pt.Y);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static Thickness LogicalThicknessToDevice(Thickness logicalThickness)
         {
             Point topLeft = LogicalPixelsToDevice(new Point(logicalThickness.Left, logicalThickness.Top));

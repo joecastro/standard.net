@@ -40,6 +40,7 @@ namespace Standard
         /// Static ctor for CornerRadiusAnimation establishes
         /// dependency properties, using as much shared data as possible.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
         static CornerRadiusAnimation()
         {
             Type typeofProp = typeof(CornerRadius?);
@@ -334,6 +335,7 @@ namespace Standard
             return this._ScaleCornerRadius(this._SubtractCornerRadius(to, from), progress);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         private CornerRadius _ScaleCornerRadius(CornerRadius first, double currentRepeat)
         {
             return new CornerRadius(
@@ -343,6 +345,7 @@ namespace Standard
                 first.BottomLeft * currentRepeat);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         private CornerRadius _SubtractCornerRadius(CornerRadius first, CornerRadius second)
         {
             return new CornerRadius(
@@ -352,11 +355,13 @@ namespace Standard
                 first.BottomLeft - second.BottomLeft);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "defaultOriginValue")]
         private static bool _IsValidAnimationValueCornerRadius(CornerRadius defaultOriginValue)
         {
             return true;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         private CornerRadius _AddCornerRadius(CornerRadius first, CornerRadius second)
         {
             return new CornerRadius(
@@ -422,6 +427,7 @@ namespace Standard
             //a.PropertyChanged(e.Property);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "dependencyProperty"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         private void PropertyChanged(DependencyProperty dependencyProperty)
         {
             //throw new NotImplementedException();

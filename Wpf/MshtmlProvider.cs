@@ -1,9 +1,12 @@
 ﻿
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Scope = "member", Target = "Standard.WebBrowserEvents+_EventSink.#System.Reflection.IReflect.InvokeMember(System.String,System.Reflection.BindingFlags,System.Reflection.Binder,System.Object,System.Object[],System.Reflection.ParameterModifier[],System.Globalization.CultureInfo,System.String[])")]
+
 // Interface declarations for MSHTML objects.
 namespace Standard
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
@@ -243,6 +246,7 @@ namespace Standard
         private readonly _EventSink _sink;
         private SafeConnectionPointCookie _cookie;
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public WebBrowserEvents(WebBrowser browser)
         {
             if (browser.Document == null)
@@ -266,6 +270,7 @@ namespace Standard
             private static readonly Dictionary<int, MethodInfo> _dispIdMethodMap = typeof(DWebBrowserEvents2).GetMethods()
                 .ToDictionary(mi => ((DispIdAttribute[])mi.GetCustomAttributes(typeof(DispIdAttribute), false))[0].Value);
 
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             internal _EventSink(WebBrowserEvents target)
             {
                 Assert.IsNotNull(target);
@@ -329,6 +334,7 @@ namespace Standard
 
             object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters)
             {
+                Verify.IsNotNull(name, "name");
                 if (name.StartsWith("[DISPID=", StringComparison.OrdinalIgnoreCase))
                 {
                     int dispid = int.Parse(name.Substring(8, name.Length - 9), CultureInfo.InvariantCulture);
@@ -359,22 +365,19 @@ namespace Standard
 
         #region IDisposable Pattern
 
+        #if DEBUG
+        [SuppressMessage("Microsoft.Performance", "CA1821:RemoveEmptyFinalizers")]
         ~WebBrowserEvents()
         {
             Assert.Fail();
-            _Dispose(false);
         }
+        #endif
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "_cookie")]
+        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "_cookie")]
         public void Dispose()
         {
-            _Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void _Dispose(bool disposing)
-        {
             Utility.SafeDispose(ref _cookie);
+            GC.SuppressFinalize(this);
         }
 
         #endregion
@@ -382,6 +385,7 @@ namespace Standard
 
     internal static partial class Utility
     {
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static string GetWebPageTitle(WebBrowser browser)
         {
             if (browser.Document == null)
@@ -392,6 +396,7 @@ namespace Standard
             return ((IHtmlDocument2)browser.Document).GetTitle();
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void SuppressJavaScriptErrors(WebBrowser browser)
         {
             if (browser.Document != null)

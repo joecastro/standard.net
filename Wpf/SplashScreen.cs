@@ -2,6 +2,7 @@
 namespace Standard
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
     using System.Reflection;
@@ -16,8 +17,9 @@ namespace Standard
     //        window from going inactive.
     // * FadeInDuration doesn't work because this is being created on the main UI thread.  For multiple reasons we
     //        should probably create this window on a background thread.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
-    public class SplashScreen
+    internal class SplashScreen
     {
         private static readonly BLENDFUNCTION _BaseBlendFunction = new BLENDFUNCTION
         {
@@ -63,6 +65,7 @@ namespace Standard
             }
         }
 
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
         public string ResourceName
         {
             get { return _resourceName ?? ""; }
@@ -79,32 +82,37 @@ namespace Standard
         public TimeSpan FadeOutDuration { get; set; }
         public TimeSpan FadeInDuration { get; set; }
 
+        private Stream _GetImageStream()
+        {
+            Stream imageStream = null;
+            // Try to use the filepath first.  If it's not provided or not available, use the embedded resource.
+            if (!string.IsNullOrEmpty(ImageFileName) && File.Exists(ImageFileName))
+            {
+                try
+                {
+                    imageStream = new FileStream(ImageFileName, FileMode.Open);
+                }
+                catch (IOException) { }
+            }
+
+            if (imageStream == null)
+            {
+                imageStream = _resourceManager.GetStream(ResourceName, CultureInfo.CurrentUICulture);
+                if (imageStream == null)
+                {
+                    throw new IOException("The resource could not be found.");
+                }
+            }
+
+            return imageStream;
+        }
+
         public void Show()
         {
             _VerifyMutability();
 
-            Stream imageStream = null;
-            try
+            using (Stream imageStream = _GetImageStream())
             {
-                // Try to use the filepath first.  If it's not provided or not available, use the embedded resource.
-                if (!string.IsNullOrEmpty(ImageFileName) && File.Exists(ImageFileName))
-                {
-                    try
-                    {
-                        imageStream = new FileStream(ImageFileName, FileMode.Open);
-                    }
-                    catch (IOException) { }
-                }
-
-                if (imageStream == null)
-                {
-                    imageStream = _resourceManager.GetStream(ResourceName, CultureInfo.CurrentUICulture);
-                    if (imageStream == null)
-                    {
-                        throw new IOException("The resource could not be found.");
-                    }
-                }
-
                 Size bitmapSize;
                 _hBitmap = _CreateHBITMAPFromImageStream(imageStream, out bitmapSize);
 
@@ -142,7 +150,6 @@ namespace Standard
                     }
                 }
 
-
                 if (CloseOnMainWindowCreation)
                 {
                     Dispatcher.CurrentDispatcher.BeginInvoke(
@@ -167,12 +174,9 @@ namespace Standard
                     _dt.Start();
                 }
             }
-            finally
-            {
-                Utility.SafeDispose(ref imageStream);
-            }
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public void Close()
         {
             if (!_dispatcher.CheckAccess())
@@ -265,6 +269,8 @@ namespace Standard
             }
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private static SafeHBITMAP _CreateHBITMAPFromImageStream(Stream imgStream, out Size bitmapSize)
         {
             IWICImagingFactory pImagingFactory = null;

@@ -220,6 +220,7 @@ namespace Standard
         /// <param name="source">
         /// The stream that this IStream reference is wrapping.
         /// </param>
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public ManagedIStream(Stream source)
         {
             Verify.IsNotNull(source, "source");
@@ -532,7 +533,7 @@ namespace Standard
     /// <summary>
     /// Wraps an existing stream in a read-only interface.  The stream can still be modified externally.
     /// </summary>
-    public class ReadonlyStream : Stream
+    internal class ReadonlyStream : Stream
     {
         private Stream _stream;
 
@@ -617,7 +618,7 @@ namespace Standard
     /// <summary>
     /// Wraps a string to provide read-only Stream semantics.
     /// </summary>
-    public class StringStream : Stream
+    internal class StringStream : Stream
     {
         private string _source;
         private int _position;

@@ -10,6 +10,7 @@ namespace Standard
     using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Windows;
     using System.Windows.Media;
@@ -17,8 +18,6 @@ namespace Standard
 
     internal static partial class Utility
     {
-        private static readonly Version _presentationFrameworkVersion = Assembly.GetAssembly(typeof(Window)).GetName().Version;
-
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static byte[] GetBytesFromBitmapSource(BitmapSource bmp)
         {
@@ -85,6 +84,8 @@ namespace Standard
 
         // This can be cached.  It's not going to change under reasonable circumstances.
         private static int s_bitDepth; // = 0;
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static int _GetBitDepth()
         {
             if (s_bitDepth == 0)
@@ -97,11 +98,13 @@ namespace Standard
             return s_bitDepth;
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static BitmapFrame GetBestMatch(IList<BitmapFrame> frames, int width, int height)
         {
             return _GetBestMatch(frames, _GetBitDepth(), width, height);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static int _MatchImage(BitmapFrame frame, int bitDepth, int width, int height, int bpp)
         {
             int score = 2 * _WeightedAbs(bpp, bitDepth, false) +
@@ -111,6 +114,7 @@ namespace Standard
             return score;
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static int _WeightedAbs(int valueHave, int valueWant, bool fPunish)
         {
             int diff = (valueHave - valueWant);
@@ -126,6 +130,7 @@ namespace Standard
         /// From a list of BitmapFrames find the one that best matches the requested dimensions.
         /// The methods used here are copied from Win32 sources.  We want to be consistent with
         /// system behaviors.
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static BitmapFrame _GetBestMatch(IList<BitmapFrame> frames, int bitDepth, int width, int height)
         {
             int bestScore = int.MaxValue;
@@ -170,6 +175,7 @@ namespace Standard
             return c.B | (c.G << 8) | (c.R << 16);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static int AlphaRGB(Color c)
         {
             return c.B | (c.G << 8) | (c.R << 16) | (c.A << 24);
@@ -178,6 +184,7 @@ namespace Standard
         /// <summary>Convert a native integer that represent a color with an alpha channel into a Color struct.</summary>
         /// <param name="color">The integer that represents the color.  Its bits are of the format 0xAARRGGBB.</param>
         /// <returns>A Color representation of the parameter.</returns>
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static Color ColorFromArgbDword(uint color)
         {
             return Color.FromArgb(
@@ -211,18 +218,6 @@ namespace Standard
             }
 
             return MemCmp(leftPixels, rightPixels, leftPixels.Length);
-        }
-
-        /// <summary>
-        /// Is this using WPF4?
-        /// </summary>
-        /// <remarks>
-        /// There are a few specific bugs in Window in 3.5SP1 and below that require workarounds
-        /// when handling WM_NCCALCSIZE on the HWND.
-        /// </remarks>
-        public static bool IsPresentationFrameworkVersionLessThan4
-        {
-            get { return _presentationFrameworkVersion < new Version(4, 0); }
         }
 
         // Caller is responsible for destroying the HICON
@@ -317,6 +312,7 @@ namespace Standard
             }
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void AddDependencyPropertyChangeListener(object component, DependencyProperty property, EventHandler listener)
         {
             if (component == null)
@@ -330,6 +326,7 @@ namespace Standard
             dpd.AddValueChanged(component, listener);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void RemoveDependencyPropertyChangeListener(object component, DependencyProperty property, EventHandler listener)
         {
             if (component == null)
@@ -343,24 +340,25 @@ namespace Standard
             dpd.RemoveValueChanged(component, listener);
         }
 
-        public static bool IsThicknessNonNegative(Thickness thickness)
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static bool IsNonNegative(this Thickness thickness)
         {
-            if (!IsDoubleFiniteAndNonNegative(thickness.Top))
+            if (!thickness.Top.IsFiniteAndNonNegative())
             {
                 return false;
             }
 
-            if (!IsDoubleFiniteAndNonNegative(thickness.Left))
+            if (!thickness.Left.IsFiniteAndNonNegative())
             {
                 return false;
             }
 
-            if (!IsDoubleFiniteAndNonNegative(thickness.Bottom))
+            if (!thickness.Bottom.IsFiniteAndNonNegative())
             {
                 return false;
             }
 
-            if (!IsDoubleFiniteAndNonNegative(thickness.Right))
+            if (!thickness.Right.IsFiniteAndNonNegative())
             {
                 return false;
             }
@@ -368,34 +366,25 @@ namespace Standard
             return true;
         }
 
-        public static bool IsCornerRadiusValid(CornerRadius cornerRadius)
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static bool IsValid(this CornerRadius cornerRadius)
         {
-            if (!IsDoubleFiniteAndNonNegative(cornerRadius.TopLeft))
+            if (!cornerRadius.TopLeft.IsFiniteAndNonNegative())
             {
                 return false;
             }
 
-            if (!IsDoubleFiniteAndNonNegative(cornerRadius.TopRight))
+            if (!cornerRadius.TopRight.IsFiniteAndNonNegative())
             {
                 return false;
             }
 
-            if (!IsDoubleFiniteAndNonNegative(cornerRadius.BottomLeft))
+            if (!cornerRadius.BottomLeft.IsFiniteAndNonNegative())
             {
                 return false;
             }
 
-            if (!IsDoubleFiniteAndNonNegative(cornerRadius.BottomRight))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private static bool IsDoubleFiniteAndNonNegative(double d)
-        {
-            if (double.IsNaN(d) || double.IsInfinity(d) || d < 0)
+            if (!cornerRadius.BottomRight.IsFiniteAndNonNegative())
             {
                 return false;
             }
