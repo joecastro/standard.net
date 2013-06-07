@@ -3,6 +3,7 @@ namespace Standard
 {
     using System;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Text;
 
     [DebuggerDisplay("SmallUri: { GetUri() }")]
@@ -12,6 +13,7 @@ namespace Standard
         private readonly byte[] _utf8String;
         private readonly bool _isHttp;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public SmallUri(Uri value)
         {
             _isHttp = false;
@@ -38,6 +40,7 @@ namespace Standard
             Assert.IsNotNull(_utf8String);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public SmallUri(string value)
         {
             _isHttp = false;
@@ -65,6 +68,7 @@ namespace Standard
 
         #region Object Overrides
 
+        [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "GetString")]
         public override string ToString()
         {
             Assert.Fail();

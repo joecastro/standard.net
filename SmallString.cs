@@ -2,6 +2,8 @@
 namespace Standard
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
 
     [System.Diagnostics.DebuggerDisplay("SmallString: { GetString() }")]
     internal struct SmallString : IEquatable<SmallString>, IComparable<SmallString>
@@ -20,6 +22,7 @@ namespace Standard
         private _SmallFlags _flags;
         private int _cachedHashCode;
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public SmallString(string value, bool precacheHashCode = false)
         {
             _flags = _SmallFlags.None;
@@ -69,6 +72,7 @@ namespace Standard
 
         #region Object Overrides
 
+        [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "GetString")]
         public override string ToString()
         {
             Assert.Fail();
@@ -161,7 +165,7 @@ namespace Standard
 
             if (_IsInt64)
             {
-                return BitConverter.ToInt64(_encodedBytes, 0).ToString();
+                return BitConverter.ToInt64(_encodedBytes, 0).ToString(CultureInfo.InvariantCulture);
             }
 
             return s_Encoder.GetString(_encodedBytes);
@@ -226,7 +230,7 @@ namespace Standard
                     string left = this.GetString();
                     string right = other.GetString();
 
-                    return left.CompareTo(right);
+                    return string.Compare(left, right, StringComparison.Ordinal);
                 }
 
                 if (_encodedBytes[i] != other._encodedBytes[i])

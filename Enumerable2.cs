@@ -3,8 +3,7 @@ namespace Standard
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Further LINQ extensions
@@ -37,6 +36,7 @@ namespace Standard
         /// <param name="rest">A collection of all items in the original collection that do not satisfy the condition.</param>
         /// <returns>A collection of all items in the original collection that satisfy the condition.</returns>
         /// <remarks>Unlike most extension methods of this nature, this does not perform the operation lazily.</remarks>
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IEnumerable<T> SplitWhere<T>(this IEnumerable<T> collection, Predicate<T> condition, out IEnumerable<T> rest)
         {
             Verify.IsNotNull(collection, "collection");
@@ -68,6 +68,7 @@ namespace Standard
         /// <param name="enumerable">The collection to be enumerated.</param>
         /// <param name="startIndex">The index (inclusive) of the first item to be returned.</param>
         /// <returns></returns>
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IEnumerable<T> Sublist<T>(this IEnumerable<T> enumerable, int startIndex)
         {
             return Sublist(enumerable, startIndex, null);
@@ -85,6 +86,7 @@ namespace Standard
         /// If this is greater than the count of the collection after startIndex, then the full collection after startIndex is returned.
         /// </param>
         /// <returns></returns>
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IEnumerable<T> Sublist<T>(this IEnumerable<T> enumerable, int startIndex, int? endIndex)
         {
             Verify.IsNotNull(enumerable, "enumerable");
@@ -131,11 +133,13 @@ namespace Standard
             }
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static bool AreSorted<T>(this IEnumerable<T> enumerable)
         {
             return _AreSorted(enumerable);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static bool AreSorted<T>(this IEnumerable<T> enumerable, Comparison<T> comparison)
         {
             Verify.IsNotNull(enumerable, "enumerable");
@@ -147,79 +151,60 @@ namespace Standard
                     return true;
                 }
 
-                return _AreSorted(enumerable);
+                comparison = delegate(T left, T right)
+                {
+                    if (left == null)
+                    {
+                        if (right == null)
+                        {
+                            return 0;
+                        }
+                        return -((IComparable<T>)right).CompareTo(left);
+                    }
+                    return ((IComparable<T>)left).CompareTo(right);
+                };
             }
 
             return _AreSorted(enumerable, comparison);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static bool _AreSorted<T>(IEnumerable<T> enumerable, Comparison<T> comparison)
         {
-            T last = default(T);
-            bool isFirst = true;
-            foreach (var item in enumerable)
+            var enumerator = enumerable.GetEnumerator();
+            if (!enumerator.MoveNext())
             {
-                if (isFirst)
+                return true;
+            }
+
+            T last = enumerator.Current;
+            while (enumerator.MoveNext())
+            {
+                if (comparison(last, enumerator.Current) > 0)
                 {
-                    last = item;
-                    isFirst = false;
+                    return false;
                 }
-                else
-                {
-                    if (comparison(last, item) > 0)
-                    {
-                        return false;
-                    }
-                    last = item;
-                } 
+                last = enumerator.Current;
             }
 
             return true;
         }
 
-        private static bool _AreSorted<T>(IEnumerable<T> enumerable)
-        {
-            IComparable<T> last = null;
-            bool isFirstNonNull = true;
-            foreach (var item in enumerable)
-            {
-                if (isFirstNonNull)
-                {
-                    last = (IComparable<T>)item;
-                    if (last != null)
-                    {
-                        isFirstNonNull = false;
-                    }
-                }
-                else
-                {
-                    if (last.CompareTo(item) > 0)
-                    {
-                        return false;
-                    }
-                    last = (IComparable<T>)item;
-                    if (last == null)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void AddRange<T>(this ICollection<T> collection, params T[] items)
         {
             Verify.IsNotNull(collection, "collection");
             _AddRange(collection, items);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
             Verify.IsNotNull(collection, "collection");
             _AddRange(collection, items);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static void _AddRange<T>(ICollection<T> collection, IEnumerable<T> items)
         {
             if (items == null)
@@ -233,12 +218,14 @@ namespace Standard
             }
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IEnumerable<T> Reverse<T>(this IList<T> list)
         {
             Verify.IsNotNull(list, "list");
             return _Reverse(list);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static IEnumerable<T> _Reverse<T>(IList<T> list)
         {
             for (int i = list.Count - 1; i >= 0; --i)
@@ -247,12 +234,14 @@ namespace Standard
             }
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IList<T> Shuffle<T>(this IList<T> list)
         {
             var r = new Random();
             return Shuffle(list, () => r.Next(list.Count));
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IList<T> Shuffle<T>(this IList<T> list, Func<int> numberGenerator)
         {
             Verify.IsNotNull(list, "list");
@@ -271,6 +260,7 @@ namespace Standard
             return _Shuffle(list, swapIndices);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static IList<T> _Shuffle<T>(IList<T> list, int[] swapIndices)
         {
             Assert.AreEqual(list.Count, swapIndices.Length);

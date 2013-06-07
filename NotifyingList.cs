@@ -6,7 +6,9 @@ namespace Standard
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
 
+    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
     internal class NotifyingList<T> : IList<T>, INotifyCollectionChanged where T : INotifyPropertyChanged
     {
         private readonly ObservableCollection<T> _list;

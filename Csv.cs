@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Text;
 
-    public static class Csv
+    internal static class Csv
     {
         public static string Escape(string str)
         {

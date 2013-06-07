@@ -298,6 +298,7 @@ namespace Standard
         /// <param name="suggestedPath"></param>
         /// <param name="overwrite"></param>
         /// <returns></returns>
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static string SafeCopyFile(string sourceFileName, string destFileName, SafeCopyFileOptions options)
         {
             switch (options)
@@ -472,7 +473,7 @@ namespace Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void EnsureDirectory(string path)
         {
-            if (!path.EndsWith(@"\"))
+            if (!path.EndsWith(@"\", StringComparison.Ordinal))
             {
                 path += @"\";
             }
@@ -763,6 +764,7 @@ namespace Standard
             return -1;
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static string MakeValidFileName(string invalidPath)
         {
             return invalidPath
@@ -777,6 +779,7 @@ namespace Standard
                 .Replace('|', '_');
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IEnumerable<string> GenerateFileNames(string directory, string primaryFileName, string extension)
         {
             Verify.IsNeitherNullNorEmpty(directory, "directory");
@@ -803,6 +806,7 @@ namespace Standard
             }
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static bool TryFileMove(string sourceFileName, string destFileName)
         {
             if (!File.Exists(destFileName))

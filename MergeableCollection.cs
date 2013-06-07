@@ -234,7 +234,7 @@
             {
                 if (!_areItemsMergable)
                 {
-                    throw new InvalidOperationException("This can only be used on collections with Mergeable items.");
+                    throw new InvalidOperationException("This can only be used on collections with mergable items.");
                 }
 
                 TItem ret;
