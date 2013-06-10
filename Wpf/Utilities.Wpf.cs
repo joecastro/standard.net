@@ -18,6 +18,10 @@ namespace Standard
 
     internal static partial class Utility
     {
+        private static readonly bool _isNotAtRuntime = (bool)System.ComponentModel.DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(System.Windows.DependencyObject)).DefaultValue;
+
+        public static bool IsInDesignMode { get { return _isNotAtRuntime; } }
+
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static byte[] GetBytesFromBitmapSource(BitmapSource bmp)
         {
