@@ -125,6 +125,22 @@ namespace Standard
             }
         }
 
+        /// <summary>Verifies that an argument is not null.</summary>
+        /// <typeparam name="T">Type of the object to validate.  Must be a class.</typeparam>
+        /// <param name="obj">The object to validate.</param>
+        /// <param name="name">The name of the parameter that will be presented if an exception is thrown.</param>
+        /// <param name="message">The message to display with the exception</param>
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DebuggerStepThrough]
+        public static void IsNotNull<T>(T obj, string name, string message) where T : class
+        {
+            if (null == obj)
+            {
+                Assert.Fail();
+                throw new ArgumentNullException(name, message);
+            }
+        }
+
         /// <summary>Verifies that an argument is null.</summary>
         /// <typeparam name="T">Type of the object to validate.  Must be a class.</typeparam>
         /// <param name="obj">The object to validate.</param>
