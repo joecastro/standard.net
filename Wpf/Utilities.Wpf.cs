@@ -20,6 +20,7 @@ namespace Standard
     {
         private static readonly bool _isNotAtRuntime = (bool)System.ComponentModel.DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(System.Windows.DependencyObject)).DefaultValue;
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static bool IsInDesignMode { get { return _isNotAtRuntime; } }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]

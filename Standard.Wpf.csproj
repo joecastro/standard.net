@@ -37,6 +37,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -71,6 +72,7 @@
     <Compile Include="Wpf\DpiHelper.cs" />
     <Compile Include="Wpf\GlassHelper.cs" />
     <Compile Include="Wpf\MshtmlProvider.cs" />
+    <Compile Include="Wpf\SingleInstance.cs" />
     <Compile Include="Wpf\SplashScreen.cs" />
     <Compile Include="Wpf\Utilities.Wpf.cs" />
     <Compile Include="Wpf\WindowExtensions.cs" />
