@@ -2848,6 +2848,20 @@
             _DwmSetWindowAttribute(hwnd, DWMWA.DISALLOW_PEEK, ref dwDisallow, sizeof(int));
         }
 
+        public static void DwmSetWindowAttributeForceIconicRepresentation(IntPtr hwnd, bool forceIconicRepresentation)
+        {
+            Assert.IsTrue(Utility.IsOSWindows7OrNewer);
+            int dwForce = (int)(forceIconicRepresentation ? Win32Value.TRUE : Win32Value.FALSE);
+            _DwmSetWindowAttribute(hwnd, DWMWA.FORCE_ICONIC_REPRESENTATION, ref dwForce, sizeof(int));
+        }
+
+        public static void DwmSetWindowAttributeHasIconicBitmap(IntPtr hwnd, bool hasIconicBitmap)
+        {
+            Assert.IsTrue(Utility.IsOSWindows7OrNewer);
+            int dwHasIconic = (int)(hasIconicBitmap ? Win32Value.TRUE : Win32Value.FALSE);
+            _DwmSetWindowAttribute(hwnd, DWMWA.FORCE_ICONIC_REPRESENTATION, ref dwHasIconic, sizeof(int));
+        }
+
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("user32.dll", EntryPoint = "EnableMenuItem")]
         private static extern int _EnableMenuItem(IntPtr hMenu, SC uIDEnableItem, MF uEnable);
@@ -3582,8 +3596,6 @@
 
 
         #region Win7 declarations
-
-        //#define DWM_SIT_DISPLAYFRAME    0x00000001  // Display a window frame around the provided bitmap
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("dwmapi.dll", PreserveSig = false)]
